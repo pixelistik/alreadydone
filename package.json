@@ -4,7 +4,9 @@
   "description": "A simplistic, collaborative realtime todo web app that works offline.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha "
+    "test": "mocha",
+    "build": "browserify js/app.js -o js/bundle.js",
+    "watch": "watchify --debug js/app.js -o js/bundle.js"
   },
   "repository": {
     "type": "git",
