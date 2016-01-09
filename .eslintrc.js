@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
     "rules": {
         "indent": [
@@ -15,7 +17,17 @@ module.exports = {
         "semi": [
             2,
             "always"
-        ]
+        ],
+        "curly": [2],
+        "no-multi-spaces": [2],
+        "eqeqeq": [2],
+        "strict": [2, "global"],
+        "brace-style": [2],
+        "space-before-function-paren": [
+            2,
+            { "anonymous": "always", "named": "never" }
+        ],
+        "space-before-blocks": [2]
     },
     "env": {
         "browser": true,
