@@ -1,0 +1,21 @@
+{
+  "name": "alreadydone",
+  "version": "0.0.0",
+  "description": "A simplistic, collaborative realtime todo web app that works offline.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pixelistik/alreadydone.git"
+  },
+  "keywords": [
+    "todo"
+  ],
+  "author": "pixelistik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pixelistik/alreadydone/issues"
+  }
+}
