@@ -1,3 +1,5 @@
+"use strict";
+
 var assert = require("chai").assert;
 var Task = require("../js/models/task.js");
 

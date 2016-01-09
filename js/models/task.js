@@ -1,3 +1,5 @@
+"use strict";
+
 var ko = require("knockout");
 
 var Task = function Task(title) {
