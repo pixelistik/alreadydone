@@ -25,15 +25,44 @@ describe("List", function () {
         });
     });
 
-    describe("Items", function () {
-        it("should start with no items", function () {
+    describe("Tasks", function () {
+        it("should start with no tasks", function () {
             var list = List();
 
-            assert.lengthOf(list.items(), 0);
+            assert.lengthOf(list.tasks(), 0);
+        });
+
+        it("should be possible to add a task", function () {
+            var list = List();
+
+            list.addingTitle("Title of a test task");
+            list.addTask();
+
+            assert.equal(list.tasks()[0].title(), "Title of a test task");
         });
     });
 
     describe("Local persistence", function () {
+        it("should save to and restore from storage", function () {
+            var mockStorage = {
+                getItem: function () {
+                    return this.value;
+                },
+                setItem: function (key, value) {
+                    this.value = value;
+                }
+            };
 
+            var list = List();
+            list.tasks.push({ title: "some item"});
+
+            list.saveToStorage(mockStorage);
+
+            var restoredList = List();
+            restoredList.loadFromStorage(mockStorage);
+
+            assert.equal(list.id(), restoredList.id());
+            assert.deepEqual(list.tasks(), restoredList.tasks());
+        });
     });
 });
