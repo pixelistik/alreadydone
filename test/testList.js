@@ -23,6 +23,12 @@ describe("List", function () {
             assert.lengthOf(list2.id(), 12);
             assert.notEqual(list1.id(), list2.id());
         });
+
+        it("should use a provided ID", function () {
+            var list = List("myProvidedId");
+
+            assert.equal(list.id(), "myProvidedId");
+        })
     });
 
     describe("Tasks", function () {

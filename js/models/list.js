@@ -18,9 +18,9 @@ var randomId = function randomId() {
     return id;
 };
 
-var List = function List() {
+var List = function List(id) {
     return {
-        id: ko.observable(randomId()),
+        id: ko.observable(id || randomId()),
         tasks: ko.observableArray([]),
         saveToStorage: function (storage) {
             storage.setItem(this.id(), ko.toJSON(this));
