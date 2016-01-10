@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
+    "test:watch": "mocha --watch",
     "debugger": "node-inspector --save-live-edit",
     "test:debug": "mocha --debug --debug-brk",
     "build": "browserify js/app.js -o js/bundle.js",
