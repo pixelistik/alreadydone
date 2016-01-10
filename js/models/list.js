@@ -23,16 +23,20 @@ var List = function List(id) {
     this.tasks = ko.observableArray([]);
     this.storage = ko.observable();
     this.saveToStorage = function () {
-        this.storage().setItem(this.id(), ko.toJSON(this));
+        var json = ko.toJSON(this);
+        if (this.storage()) {
+            this.storage().setItem(this.id(), json);
+        }
     };
-    this.loadFromStorage = function (storage) {
-        var data = JSON.parse(storage.getItem(this.id()));
-        this.id(data.id);
+    this.loadFromStorage = function () {
+        var json = this.storage().getItem(this.id());
+        var data = JSON.parse(json);
         this.tasks(data.tasks);
     };
     this.addingTitle = ko.observable();
     this.addTask = function () {
         this.tasks.push(new Task(this.addingTitle()));
+        this.saveToStorage();
     };
 };
 

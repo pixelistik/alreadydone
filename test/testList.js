@@ -28,7 +28,7 @@ describe("List", function () {
             var list = new List("myProvidedId");
 
             assert.equal(list.id(), "myProvidedId");
-        })
+        });
     });
 
     describe("Tasks", function () {
@@ -51,22 +51,24 @@ describe("List", function () {
     describe("Local persistence", function () {
         it("should save to and restore from storage", function () {
             var mockStorage = {
-                getItem: function () {
-                    return this.value;
+                values: {},
+                getItem: function (key) {
+                    return this.values[key];
                 },
                 setItem: function (key, value) {
-                    this.value = value;
+                    this.values[key] = value;
                 }
             };
 
-            var list = new List();
+            var list = new List("myListId");
             list.tasks.push({ title: "some item"});
 
             list.storage(mockStorage);
-            list.saveToStorage(mockStorage);
+            list.saveToStorage();
 
-            var restoredList = new List();
-            restoredList.loadFromStorage(mockStorage);
+            var restoredList = new List("myListId");
+            restoredList.storage(mockStorage);
+            restoredList.loadFromStorage();
 
             assert.equal(list.id(), restoredList.id());
             assert.deepEqual(list.tasks(), restoredList.tasks());
