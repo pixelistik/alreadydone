@@ -18,26 +18,23 @@ var randomId = function randomId() {
     return id;
 };
 
-var List = {
-    init: function (id) {
-        this.id = ko.observable();
-        this.id(id || randomId());
-        this.tasks = ko.observableArray([]);
-        this.addingTitle = ko.observable();
-    },
-    saveToStorage: function (storage) {
-        storage.setItem(this.id(), ko.toJSON(this));
-    },
-    loadFromStorage: function (storage) {
-        var data = JSON.parse(storage.getItem(this.id()));
-        this.id(data.id);
-        this.tasks(data.tasks);
-    },
-    addTask: function () {
-        var task = Object.create(Task);
-        task.title(this.addingTitle());
-        this.tasks.push(task);
-    }
+var List = function List(id) {
+    return {
+        id: ko.observable(id || randomId()),
+        tasks: ko.observableArray([]),
+        saveToStorage: function (storage) {
+            storage.setItem(this.id(), ko.toJSON(this));
+        },
+        loadFromStorage: function (storage) {
+            var data = JSON.parse(storage.getItem(this.id()));
+            this.id(data.id);
+            this.tasks(data.tasks);
+        },
+        addingTitle: ko.observable(),
+        addTask: function () {
+            this.tasks.push(Task(this.addingTitle()));
+        }
+    };
 };
 
 module.exports = List;
