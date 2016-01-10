@@ -19,21 +19,20 @@ var randomId = function randomId() {
 };
 
 var List = function List(id) {
-    return {
-        id: ko.observable(id || randomId()),
-        tasks: ko.observableArray([]),
-        saveToStorage: function (storage) {
-            storage.setItem(this.id(), ko.toJSON(this));
-        },
-        loadFromStorage: function (storage) {
-            var data = JSON.parse(storage.getItem(this.id()));
-            this.id(data.id);
-            this.tasks(data.tasks);
-        },
-        addingTitle: ko.observable(),
-        addTask: function () {
-            this.tasks.push(Task(this.addingTitle()));
-        }
+    this.id = ko.observable(id || randomId());
+    this.tasks = ko.observableArray([]);
+    this.storage = ko.observable();
+    this.saveToStorage = function () {
+        this.storage().setItem(this.id(), ko.toJSON(this));
+    };
+    this.loadFromStorage = function (storage) {
+        var data = JSON.parse(storage.getItem(this.id()));
+        this.id(data.id);
+        this.tasks(data.tasks);
+    };
+    this.addingTitle = ko.observable();
+    this.addTask = function () {
+        this.tasks.push(new Task(this.addingTitle()));
     };
 };
 

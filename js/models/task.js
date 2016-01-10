@@ -3,12 +3,10 @@
 var ko = require("knockout");
 
 var Task = function Task(title) {
-    return {
-        title: ko.observable(title),
-        done: ko.observable(false),
-        toggleDone: function () {
-            this.done(!this.done());
-        }
+    this.title = ko.observable(title);
+    this.done = ko.observable(false);
+    this.toggleDone = function () {
+        this.done(!this.done());
     };
 };
 

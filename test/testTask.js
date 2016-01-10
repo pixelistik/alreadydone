@@ -9,19 +9,19 @@ describe("Task", function () {
     });
 
     it("should instantiate", function () {
-        var task = Task();
+        var task = new Task();
 
         assert.isDefined(task);
     });
 
     describe("Title", function () {
         it("should be settable initially", function () {
-            var task = Task("My test task title");
+            var task = new Task("My test task title");
             assert.equal(task.title(), "My test task title");
         });
 
         it("should be settable", function () {
-            var task = Task();
+            var task = new Task();
             task.title("The title is set.");
             assert.equal(task.title(), "The title is set.");
         });
@@ -29,12 +29,12 @@ describe("Task", function () {
 
     describe("Done state", function () {
         it("should be undone initially", function () {
-            var task = Task();
+            var task = new Task();
             assert.isFalse(task.done());
         });
 
         it("should be settable", function () {
-            var task = Task();
+            var task = new Task();
 
             task.done(true);
             assert.isTrue(task.done());
@@ -44,7 +44,7 @@ describe("Task", function () {
         });
 
         it("should be toggle-able", function () {
-            var task = Task();
+            var task = new Task();
 
             task.toggleDone();
             assert.isTrue(task.done());
