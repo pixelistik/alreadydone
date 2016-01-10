@@ -9,16 +9,18 @@ describe("List", function () {
     });
 
     it("should instantiate", function () {
-        var list = Object.create(List).init();
+        var list = Object.create(List);
 
         assert.isDefined(list);
     });
 
     describe("Creation", function () {
         it("should get a new random ID when created", function () {
-            var list1 = Object.create(List).init();
+            var list1 = Object.create(List);
+            list1.init();
 
-            var list2 = Object.create(List).init();
+            var list2 = Object.create(List);
+            list2.init();
 
             assert.lengthOf(list1.id(), 12);
             assert.lengthOf(list2.id(), 12);
@@ -26,7 +28,8 @@ describe("List", function () {
         });
 
         it("should use a provided ID", function () {
-            var list = Object.create(List).init("myProvidedId");
+            var list = Object.create(List);
+            list.init("myProvidedId");
 
             assert.equal(list.id(), "myProvidedId");
         });
@@ -34,13 +37,15 @@ describe("List", function () {
 
     describe("Tasks", function () {
         it("should start with no tasks", function () {
-            var list = Object.create(List).init();
+            var list = Object.create(List);
+            list.init();
 
             assert.lengthOf(list.tasks(), 0);
         });
 
         it("should be possible to add a task", function () {
-            var list = Object.create(List).init();
+            var list = Object.create(List);
+            list.init();
 
             list.addingTitle("Title of a test task");
             list.addTask();
@@ -60,13 +65,15 @@ describe("List", function () {
                 }
             };
 
-            var list = Object.create(List).init();
+            var list = Object.create(List);
+            list.init();
 
             list.tasks.push({ title: "some item"});
 
             list.saveToStorage(mockStorage);
 
-            var restoredList = Object.create(List).init();
+            var restoredList = Object.create(List);
+            restoredList.init();
 
             restoredList.loadFromStorage(mockStorage);
 

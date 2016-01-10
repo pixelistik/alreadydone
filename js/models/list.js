@@ -24,8 +24,6 @@ var List = {
         this.id(id || randomId());
         this.tasks = ko.observableArray([]);
         this.addingTitle = ko.observable();
-
-        return this;
     },
     saveToStorage: function (storage) {
         storage.setItem(this.id(), ko.toJSON(this));
