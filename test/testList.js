@@ -2,6 +2,7 @@
 
 var assert = require("chai").assert;
 var List = require("../js/models/list.js");
+var Task = require("../js/models/task.js");
 
 describe("List", function () {
     it("should exist", function () {
@@ -61,7 +62,8 @@ describe("List", function () {
             };
 
             var list = new List("myListId");
-            list.tasks.push({ title: "some item"});
+
+            list.tasks.push(new Task("some item"));
 
             list.storage(mockStorage);
             list.saveToStorage();
@@ -71,7 +73,12 @@ describe("List", function () {
             restoredList.loadFromStorage();
 
             assert.equal(list.id(), restoredList.id());
-            assert.deepEqual(list.tasks(), restoredList.tasks());
+            assert.equal(list.tasks().length, restoredList.tasks().length);
+
+            assert.equal(
+                list.tasks()[0].title(),
+                restoredList.tasks()[0].title()
+            );
         });
     });
 });
