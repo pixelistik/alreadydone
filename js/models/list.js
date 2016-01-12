@@ -22,26 +22,42 @@ var List = function List(id) {
     this.id = ko.observable(id || randomId());
     this.tasks = ko.observableArray([]);
     this.storage = ko.observable();
+
+    var filterHiddenPropertiesFromJson = function (key, value) {
+        if (key[0] === "_") {
+            return undefined;
+        } else {
+            return value;
+        }
+    };
+
     this.saveToStorage = function () {
-        var json = ko.toJSON(this);
+        var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
         if (this.storage()) {
             this.storage().setItem(this.id(), json);
         }
     };
+
     this.loadFromStorage = function () {
         var json = this.storage().getItem(this.id());
         var data = JSON.parse(json);
         this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
-            return new Task(taskData);
-        }));
-
-
+            return new Task(taskData, this.tasks);
+        }.bind(this)));
     };
+
     this.addingTitle = ko.observable();
     this.addTask = function () {
-        this.tasks.push(new Task(this.addingTitle()));
+        this.tasks.push(new Task(this.addingTitle(), this.tasks));
         this.saveToStorage();
     };
+
+    var changeHandler = function () {
+        this.saveToStorage();
+    }.bind(this);
+
+    this.tasks.subscribe(changeHandler);
+    this.tasks.subscribe(changeHandler, null, "child changed");
 };
 
 module.exports = List;

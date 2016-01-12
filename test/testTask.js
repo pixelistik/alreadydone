@@ -1,6 +1,7 @@
 "use strict";
 
 var assert = require("chai").assert;
+var sinon = require("sinon");
 var Task = require("../js/models/task.js");
 
 describe("Task", function () {
@@ -51,6 +52,26 @@ describe("Task", function () {
 
             task.toggleDone();
             assert.isFalse(task.done());
+        });
+    });
+
+    describe("Change notification", function () {
+        it("should optionally accept a parent reference", function () {
+            var tasks = [];
+
+            tasks.push(new Task("A task with a reference", tasks));
+        });
+
+        it("should call the subscribed handler on the parent", function () {
+            var tasks = [];
+
+            tasks.notifySubscribers = sinon.spy();
+
+            tasks.push(new Task("A task with a reference", tasks));
+
+            tasks[0].title("New title");
+
+            assert.isTrue(tasks.notifySubscribers.withArgs("New title", "child changed").calledOnce);
         });
     });
 });

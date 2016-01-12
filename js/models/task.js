@@ -2,7 +2,7 @@
 
 var ko = require("knockout");
 
-var Task = function Task(initValue) {
+var Task = function Task(initValue, parent) {
     switch (typeof initValue) {
     case "string":
         this.title = ko.observable(initValue);
@@ -17,9 +17,20 @@ var Task = function Task(initValue) {
         this.done = ko.observable(false);
     }
 
+    this._parent = parent;
+
     this.toggleDone = function () {
         this.done(!this.done());
     };
+
+    var changeHandler = function (value) {
+        if (this._parent && typeof this._parent.notifySubscribers === "function") {
+            this._parent.notifySubscribers(value, "child changed");
+        }
+    }.bind(this);
+
+    this.title.subscribe(changeHandler);
+    this.done.subscribe(changeHandler);
 };
 
 module.exports = Task;
