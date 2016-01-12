@@ -7,19 +7,37 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
-        <h2>Tasks</h2>
+        <div class="container page">
+            <h2>Tasks</h2>
 
-        <ul data-bind="foreach: tasks">
-            <li>
-                <input type="checkbox" data-bind="checked: done"/>
-                <span data-bind="text: title"> </span>
-            </li>
-        </ul>
+            <ul class="list-unstyled" data-bind="foreach: tasks">
+                <li
+                    class="row task"
+                    data-bind="css: { 'task--done': done, 'task--undone': !done() }"
+                >
+                    <span class="col-md-3">
+                        <input
+                            type="checkbox"
+                            class="task__checkbox"
+                            data-bind="checked: done"/>
+                        <span
+                            class="task__title"
+                            data-bind="text: title"
+                        >
+                        </span>
+                    </span>
+                    <!-- <span class="col-md-1">
+                        <button class="btn btn-sm " title="Delete task">✖</button>
+                    </span> -->
+                </li>
+            </ul>
 
-        <input data-bind="textInput: addingTitle" />
-        <button data-bind="click: addTask">Add</button>
+            <input data-bind="textInput: addingTitle" />
+            <button data-bind="click: addTask">Add</button>
+        </div>
         <script src="js/bundle.js"></script>
     </body>
 </html>
