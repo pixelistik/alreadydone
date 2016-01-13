@@ -19,6 +19,10 @@ var Task = function Task(initValue, parent) {
 
     this._parent = parent;
 
+    this.remove = function () {
+        this._parent.remove(this);
+    };
+
     this.toggleDone = function () {
         this.done(!this.done());
     };

@@ -47,6 +47,19 @@ describe("List", function () {
 
             assert.equal(list.tasks()[0].title(), "Title of a test task");
         });
+
+        it("should be possible to remove a task", function () {
+            var list = new List();
+
+            var task = new Task("One", list.tasks);
+
+            list.tasks.push(task);
+            assert.equal(list.tasks()[0].title(), "One");
+
+            task.remove();
+
+            assert.lengthOf(list.tasks(), 0);
+        });
     });
 
     describe("Local persistence", function () {
