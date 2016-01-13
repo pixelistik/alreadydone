@@ -50,14 +50,17 @@ describe("List", function () {
     });
 
     describe("Local persistence", function () {
-        it("should save to and restore from storage", function () {
+        it("should save to and restore from storage", function (done) {
             var mockStorage = {
                 values: {},
-                getItem: function (key) {
-                    return this.values[key];
+                getItem: function (key, callback) {
+                    callback(null,this.values[key]);
                 },
-                setItem: function (key, value) {
+                setItem: function (key, value, callback) {
                     this.values[key] = value;
+                    if (callback) {
+                        callback();
+                    }
                 }
             };
 
@@ -70,7 +73,9 @@ describe("List", function () {
 
             var restoredList = new List("myListId");
             restoredList.storage(mockStorage);
-            restoredList.loadFromStorage();
+            restoredList.loadFromStorage(function () {
+                done();
+            });
 
             assert.equal(list.id(), restoredList.id());
             assert.equal(list.tasks().length, restoredList.tasks().length);

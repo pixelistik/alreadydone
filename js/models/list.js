@@ -38,12 +38,16 @@ var List = function List(id) {
         }
     };
 
-    this.loadFromStorage = function () {
+    this.loadFromStorage = function (doneCallback) {
         this.storage().getItem(this.id(), function (err, json) {
             var data = JSON.parse(json);
             this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
                 return new Task(taskData, this.tasks);
             }.bind(this)));
+
+            if (doneCallback && typeof doneCallback === "function") {
+                doneCallback();
+            }
         }.bind(this));
 
     };
