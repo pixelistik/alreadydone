@@ -1,0 +1,6 @@
+web:
+  image: node:onbuild
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - "5000:5000"

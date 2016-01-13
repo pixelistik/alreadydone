@@ -4,6 +4,7 @@
   "description": "A simplistic, collaborative realtime todo web app that works offline.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha",
     "test:watch": "mocha --watch",
     "debugger": "node-inspector --save-live-edit",
