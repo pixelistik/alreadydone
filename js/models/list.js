@@ -39,11 +39,13 @@ var List = function List(id) {
     };
 
     this.loadFromStorage = function () {
-        var json = this.storage().getItem(this.id());
-        var data = JSON.parse(json);
-        this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
-            return new Task(taskData, this.tasks);
-        }.bind(this)));
+        this.storage().getItem(this.id(), function (err, json) {
+            var data = JSON.parse(json);
+            this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
+                return new Task(taskData, this.tasks);
+            }.bind(this)));
+        }.bind(this));
+
     };
 
     this.addingTitle = ko.observable();
