@@ -50,8 +50,11 @@ var List = function List(id) {
 
     this.addingTitle = ko.observable();
     this.addTask = function () {
-        this.tasks.push(new Task(this.addingTitle(), this.tasks));
-        this.saveToStorage();
+        if (this.addingTitle().trim() !== "") {
+            this.tasks.push(new Task(this.addingTitle().trim(), this.tasks));
+            this.addingTitle("");
+            this.saveToStorage();
+        }
     };
 
     var changeHandler = function () {
