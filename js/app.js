@@ -1,8 +1,10 @@
 "use strict";
 
 var ko = require("knockout");
-var localForage = require("localforage");
 
+ko.bindingHandlers.enterkey = require("./bindings/enterkey.js");
+
+var localForage = require("localforage");
 var List = require("./models/list.js");
 
 var list;
