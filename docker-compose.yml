@@ -1,5 +1,8 @@
 web:
-  image: node:onbuild
+  # For x86:
+  #image: node:onbuild
+  # For Arm / Raspberry:
+  hypriot/rpi-node:onbuild
   volumes:
     - .:/usr/src/app
   ports:
