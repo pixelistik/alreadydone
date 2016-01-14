@@ -1,9 +1,4 @@
 web:
-  # For x86:
-  #image: node:onbuild
-  # For Arm / Raspberry:
-  image: hypriot/rpi-node:onbuild
-  volumes:
-    - .:/usr/src/app
+  build: .
   ports:
     - "5000:5000"
