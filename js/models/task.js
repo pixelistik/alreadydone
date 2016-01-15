@@ -23,10 +23,6 @@ var Task = function Task(initValue, parent) {
         this._parent.remove(this);
     };
 
-    this.toggleDone = function () {
-        this.done(!this.done());
-    };
-
     var changeHandler = function (value) {
         if (this._parent && typeof this._parent.notifySubscribers === "function") {
             this._parent.notifySubscribers(value, "child changed");

@@ -43,16 +43,6 @@ describe("Task", function () {
             task.done(false);
             assert.isFalse(task.done());
         });
-
-        it("should be toggle-able", function () {
-            var task = new Task();
-
-            task.toggleDone();
-            assert.isTrue(task.done());
-
-            task.toggleDone();
-            assert.isFalse(task.done());
-        });
     });
 
     describe("Change notification", function () {
