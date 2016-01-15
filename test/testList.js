@@ -20,8 +20,8 @@ describe("List", function () {
             var list1 = new List();
             var list2 = new List();
 
-            assert.lengthOf(list1.id(), 12);
-            assert.lengthOf(list2.id(), 12);
+            assert.lengthOf(list1.id(), 36);
+            assert.lengthOf(list2.id(), 36);
             assert.notEqual(list1.id(), list2.id());
         });
 
