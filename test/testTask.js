@@ -15,6 +15,33 @@ describe("Task", function () {
         assert.isDefined(task);
     });
 
+    describe("Creation", function () {
+        it("should get a new random ID when created without any title", function () {
+            var task1 = new Task();
+            var task2 = new Task();
+
+            assert.lengthOf(task1.id(), 36);
+            assert.lengthOf(task2.id(), 36);
+            assert.notEqual(task1.id(), task2.id());
+        });
+
+        it("should get a new random ID when created with given title", function () {
+            var task = new Task("Some given title");
+            assert.lengthOf(task.id(), 36);
+        });
+
+        it("should get a new random ID when created with given title and state", function () {
+            var task = new Task({title: "Some given title", done: true});
+            assert.lengthOf(task.id(), 36);
+        });
+
+        it("should use a provided ID", function () {
+            var task = new Task({id: "myProvidedId"});
+
+            assert.equal(task.id(), "myProvidedId");
+        });
+    });
+
     describe("Title", function () {
         it("should be settable initially", function () {
             var task = new Task("My test task title");
