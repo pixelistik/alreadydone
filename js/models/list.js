@@ -4,10 +4,14 @@ var ko = require("knockout");
 var Task = require("./task.js");
 var generateId = require("uuid").v4;
 
-var List = function List(id) {
-    this.id = ko.observable(id || generateId());
+var List = function List(options) {
+    options = options || {};
+
+    this.id = ko.observable(options.id || generateId());
     this.tasks = ko.observableArray([]);
     this.storage = ko.observable();
+    this.apiUrl = options.apiUrl || null;
+    this.apiClient = options.apiClient || null;
 
     var filterHiddenPropertiesFromJson = function (key, value) {
         if (key[0] === "_") {
@@ -38,6 +42,18 @@ var List = function List(id) {
 
     };
 
+    this.saveToServer = function () {
+        var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
+
+        if(this.apiClient) {
+            this.apiClient.ajax({
+                type: "PUT",
+                url: this.apiUrl + "list/" + this.id(),
+                data: json
+            });
+        }
+    };
+
     this.addingTitle = ko.observable();
     this.addTask = function () {
         if (this.addingTitle().trim() !== "") {
@@ -49,6 +65,7 @@ var List = function List(id) {
 
     var changeHandler = function () {
         this.saveToStorage();
+        this.saveToServer();
     }.bind(this);
 
     this.tasks.subscribe(changeHandler);

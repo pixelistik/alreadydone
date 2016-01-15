@@ -1,6 +1,7 @@
 "use strict";
 
 var ko = require("knockout");
+var zepto = require("npm-zepto");
 
 ko.bindingHandlers.enterkey = require("./bindings/enterkey.js");
 
@@ -9,11 +10,17 @@ var List = require("./models/list.js");
 
 var list;
 
+var options = {
+    apiUrl: window.location.toString().match(/.+\//)[0],
+    apiClient: zepto
+};
+
 if(location.hash === "") {
-    list = new List();
+    list = new List(options);
     location.hash = list.id();
 } else {
-    list = new List(window.location.hash.replace("#", ""));
+    options.id = window.location.hash.replace("#", ""),
+    list = new List(options);
 }
 
 list.storage(localForage);

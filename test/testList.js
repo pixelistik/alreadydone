@@ -1,6 +1,8 @@
 "use strict";
 
 var assert = require("chai").assert;
+var sinon = require("sinon");
+
 var List = require("../js/models/list.js");
 var Task = require("../js/models/task.js");
 
@@ -26,7 +28,7 @@ describe("List", function () {
         });
 
         it("should use a provided ID", function () {
-            var list = new List("myProvidedId");
+            var list = new List({id: "myProvidedId"});
 
             assert.equal(list.id(), "myProvidedId");
         });
@@ -77,14 +79,14 @@ describe("List", function () {
                 }
             };
 
-            var list = new List("myListId");
+            var list = new List({id: "myListId"});
 
             list.tasks.push(new Task("some item"));
 
             list.storage(mockStorage);
             list.saveToStorage();
 
-            var restoredList = new List("myListId");
+            var restoredList = new List({id: "myListId"});
             restoredList.storage(mockStorage);
             restoredList.loadFromStorage(function () {
                 done();
@@ -97,6 +99,54 @@ describe("List", function () {
                 list.tasks()[0].title(),
                 restoredList.tasks()[0].title()
             );
+        });
+    });
+
+    describe("Remote persistence", function () {
+        describe("Saving", function () {
+            var list;
+            var zeptoStub;
+
+            beforeEach(function () {
+                zeptoStub = {
+                    ajax: sinon.stub()
+                };
+
+                list = new List({
+                    id: "my-test-id",
+                    apiUrl: "https://example.com/",
+                    apiClient: zeptoStub
+                });
+
+            });
+
+            it("should make a request to the correct endpoint", function () {
+                list.saveToServer();
+
+                // We are interested in the first argument of the first call
+                var arg = zeptoStub.ajax.args[0][0];
+
+                assert(zeptoStub.ajax.calledOnce);
+                assert.equal(arg.url, "https://example.com/list/my-test-id");
+                assert.equal(arg.type, "PUT");
+                assert.equal(JSON.parse(arg.data).id, "my-test-id");
+                assert.deepEqual(JSON.parse(arg.data).tasks, []);
+            });
+
+            it("should send tasks from the list", function () {
+                list.tasks.push(new Task("Task one"));
+
+                list.saveToServer();
+
+                // We are interested in the first argument of the first call
+                var arg = zeptoStub.ajax.args[0][0];
+
+                assert.equal(JSON.parse(arg.data).tasks[0].title, "Task one");
+            });
+        });
+
+        describe("Loading", function () {
+
         });
     });
 });
