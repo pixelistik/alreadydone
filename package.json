@@ -9,6 +9,8 @@
     "test:watch": "mocha --watch",
     "debugger": "node-inspector --save-live-edit",
     "test:debug": "mocha --debug --debug-brk",
+    "test-containerised": "docker-compose -f docker-compose-dev.yml run web npm run test",
+    "test-containerised:watch": "docker-compose -f docker-compose-dev.yml run web npm run test:watch",
     "build": "browserify js/app.js -o js/bundle.js",
     "watch": "watchify --debug js/app.js -o js/bundle.js"
   },
