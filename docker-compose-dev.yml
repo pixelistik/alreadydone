@@ -1,0 +1,14 @@
+# This is the dev setup, with  a mounted app directory and automatic
+# restart of the server via nodemon.
+# Run it with `docker-compose -f docker-compose-dev.yml <command>`
+web:
+  build: ./containers/app-dev
+  ports:
+    - "5000:5000"
+  links:
+  - mongodb
+  volumes:
+    - .:/usr/src/app
+
+mongodb:
+  image: mongo:2.4
