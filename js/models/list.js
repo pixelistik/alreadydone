@@ -54,7 +54,7 @@ var List = function List(options) {
         }
     };
 
-    this.addingTitle = ko.observable();
+    this.addingTitle = ko.observable("");
     this.addTask = function () {
         if (this.addingTitle().trim() !== "") {
             this.tasks.push(new Task(this.addingTitle().trim(), this.tasks));
