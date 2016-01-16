@@ -65,8 +65,10 @@ describe("List", function () {
     });
 
     describe("Local persistence", function () {
-        it("should save to and restore from storage", function (done) {
-            var mockStorage = {
+        var mockStorage;
+
+        beforeEach(function () {
+            mockStorage = {
                 values: {},
                 getItem: function (key, callback) {
                     callback(null,this.values[key] || null);
@@ -78,7 +80,9 @@ describe("List", function () {
                     }
                 }
             };
+        });
 
+        it("should save to and restore from storage", function (done) {
             var list = new List({id: "myListId"});
 
             list.tasks.push(new Task("some item"));
@@ -99,6 +103,17 @@ describe("List", function () {
                 list.tasks()[0].title(),
                 restoredList.tasks()[0].title()
             );
+        });
+
+        it("should report an error when no data is found", function (done) {
+            var list = new List();
+
+            list.storage(mockStorage);
+
+            list.loadFromStorage(function (err) {
+                assert.deepEqual(err, new Error("No local task data found"));
+                done();
+            });
         });
     });
 

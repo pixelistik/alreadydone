@@ -30,7 +30,19 @@ var List = function List(options) {
 
     this.loadFromStorage = function (doneCallback) {
         this.storage().getItem(this.id(), function (err, json) {
+            if (err) {
+                throw new Error(err);
+            }
+
             var data = JSON.parse(json);
+
+            if (!data) {
+                if (typeof doneCallback === "function") {
+                    doneCallback(new Error("No local task data found"), null);
+                }
+                return;
+            }
+
             this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
                 return new Task(taskData, this.tasks);
             }.bind(this)));
