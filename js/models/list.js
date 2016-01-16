@@ -35,8 +35,8 @@ var List = function List(options) {
                 return new Task(taskData, this.tasks);
             }.bind(this)));
 
-            if (doneCallback && typeof doneCallback === "function") {
-                doneCallback();
+            if (typeof doneCallback === "function") {
+                doneCallback(null, this);
             }
         }.bind(this));
 
