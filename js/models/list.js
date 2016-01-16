@@ -61,6 +61,7 @@ var List = function List(options) {
             this.apiClient.ajax({
                 type: "PUT",
                 url: this.apiUrl + "list/" + this.id(),
+                contentType: "application/json",
                 data: json
             });
         }
