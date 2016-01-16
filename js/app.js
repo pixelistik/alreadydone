@@ -25,10 +25,6 @@ if(location.hash === "") {
 
 list.storage(localForage);
 
-try {
-    list.loadFromStorage(localForage);
-} catch(e) {
-    console.info("No data in storage.")
-}
+list.loadFromStorage(localForage);
 
 ko.applyBindings(list);
