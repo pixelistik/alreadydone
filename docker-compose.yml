@@ -1,4 +1,9 @@
 web:
-  build: .
+  build: ./containers/app
   ports:
     - "5000:5000"
+  links:
+  - mongodb
+
+mongodb:
+  build: ./containers/mongodb
