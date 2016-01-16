@@ -69,7 +69,7 @@ describe("List", function () {
             var mockStorage = {
                 values: {},
                 getItem: function (key, callback) {
-                    callback(null,this.values[key]);
+                    callback(null,this.values[key] || null);
                 },
                 setItem: function (key, value, callback) {
                     this.values[key] = value;
