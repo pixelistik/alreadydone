@@ -21,15 +21,15 @@ var Task = function Task(initValue, parent) {
         this.id = ko.observable(generateId());
     }
 
-    this._parent = parent;
+    this.__parent = parent;
 
     this.remove = function () {
-        this._parent.remove(this);
+        this.__parent.remove(this);
     };
 
     var changeHandler = function (value) {
-        if (this._parent && typeof this._parent.notifySubscribers === "function") {
-            this._parent.notifySubscribers(value, "child changed");
+        if (this.__parent && typeof this.__parent.notifySubscribers === "function") {
+            this.__parent.notifySubscribers(value, "child changed");
         }
     }.bind(this);
 

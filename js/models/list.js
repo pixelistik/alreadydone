@@ -14,7 +14,7 @@ var List = function List(options) {
     this.apiClient = options.apiClient || null;
 
     var filterHiddenPropertiesFromJson = function (key, value) {
-        if (key[0] === "_") {
+        if (key.startsWith("__")) {
             return undefined;
         } else {
             return value;
