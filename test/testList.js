@@ -145,6 +145,7 @@ describe("List", function () {
                 assert.equal(arg.url, "https://example.com/list/my-test-id");
                 assert.equal(arg.type, "PUT");
                 assert.equal(JSON.parse(arg.data).id, "my-test-id");
+                assert.equal(JSON.parse(arg.data)._id, "my-test-id");
                 assert.deepEqual(JSON.parse(arg.data).tasks, []);
             });
 

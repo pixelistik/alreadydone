@@ -7,7 +7,7 @@ var generateId = require("uuid").v4;
 var List = function List(options) {
     options = options || {};
 
-    this.id = ko.observable(options.id || generateId());
+    this.id = this._id = ko.observable(options.id || generateId());
     this.tasks = ko.observableArray([]);
     this.storage = ko.observable();
     this.apiUrl = options.apiUrl || null;
