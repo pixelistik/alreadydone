@@ -14,11 +14,17 @@ app.put("/list/:id", function (request, response) {
     mongodb.MongoClient.connect(mongoUrl, function(err, db) {
         var collection = db.collection("documents");
 
-        collection.insertOne(
+        collection.updateOne(
+            {_id: request.body._id},
             request.body,
+            {upsert:true},
             function (err, result) {
                 db.close();
-                response.sendStatus(200);
+                if(!err) {
+                    response.sendStatus(200);
+                } else {
+                    response.status(500).send(err);
+                }
             }
         );
     });

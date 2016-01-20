@@ -61,6 +61,23 @@ describe("App backend server", function () {
                             .expect(200, done);
                     });
             });
+
+            it("should accept update requests (upserts)", function (done) {
+                request(app)
+                    .put("/list/my-test-id")
+                    .set("Accept", "application/json")
+                    .send(data)
+                    .expect(200, function () {
+                        // Request again
+                        request(app)
+                            .put("/list/my-test-id")
+                            .set("Accept", "application/json")
+                            .send(data)
+                            .expect(200, done);
+                    });
+
+
+            });
         });
     });
 });
