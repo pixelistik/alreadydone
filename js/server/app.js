@@ -29,7 +29,10 @@ app.get("/list/:id", function (request, response) {
         var collection = db.collection("documents");
 
         collection.findOne({_id: request.params.id}, function (err, items) {
-            response.send(items);
+            if(!err) {
+                response.send(items);
+            }
+
         });
 
     });
