@@ -62,7 +62,30 @@ var List = function List(options) {
                 type: "PUT",
                 url: this.apiUrl + "list/" + this.id(),
                 contentType: "application/json",
-                data: json
+                data: json,
+                success: function () { }
+            });
+        }
+    };
+
+    this.loadFromServer = function () {
+        if(this.apiClient) {
+            this.apiClient.ajax({
+                type: "GET",
+                url: this.apiUrl + "list/" + this.id(),
+                contentType: "application/json",
+                success: function (data) {
+                    // var data = JSON.parse(json);
+                    listSubscription.isDisposed = true;
+                    tasksSubscription.isDisposed = true;
+
+                    this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
+                        return new Task(taskData, this.tasks);
+                    }.bind(this)));
+
+                    listSubscription.isDisposed = false;
+                    tasksSubscription.isDisposed = false;
+                }.bind(this)
             });
         }
     };
@@ -81,8 +104,8 @@ var List = function List(options) {
         this.saveToServer();
     }.bind(this);
 
-    this.tasks.subscribe(changeHandler);
-    this.tasks.subscribe(changeHandler, null, "child changed");
+    var listSubscription = this.tasks.subscribe(changeHandler);
+    var tasksSubscription = this.tasks.subscribe(changeHandler, null, "child changed");
 };
 
 module.exports = List;
