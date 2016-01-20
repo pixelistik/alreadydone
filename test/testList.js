@@ -118,24 +118,24 @@ describe("List", function () {
     });
 
     describe("Remote persistence", function () {
-        describe("Saving", function () {
-            var list;
-            var zeptoStub;
+        var list;
+        var zeptoStub;
 
-            beforeEach(function () {
-                zeptoStub = {
-                    ajax: sinon.stub()
-                };
+        beforeEach(function () {
+            zeptoStub = {
+                ajax: sinon.stub()
+            };
 
-                list = new List({
-                    id: "my-test-id",
-                    apiUrl: "https://example.com/",
-                    apiClient: zeptoStub
-                });
-
+            list = new List({
+                id: "my-test-id",
+                apiUrl: "https://example.com/",
+                apiClient: zeptoStub
             });
 
-            it("should make a request to the correct endpoint", function () {
+        });
+
+        describe("Saving", function () {
+            it("should make a PUT request to the correct endpoint", function () {
                 list.saveToServer();
 
                 // We are interested in the first argument of the first call
@@ -162,7 +162,34 @@ describe("List", function () {
         });
 
         describe("Loading", function () {
+            it("should make a GET request to the correct endpoint", function () {
+                var response = {
+                    id: "my-test-id",
+                    _id: "my-test-id",
+                    tasks: [
+                        {title: "one", done: false},
+                        {title: "two", done: true}
+                    ]
+                };
 
+                zeptoStub.ajax.yieldsTo("success", response);
+
+                list = new List({
+                    id: "my-test-id",
+                    apiUrl: "https://example.com/",
+                    apiClient: zeptoStub
+                });
+
+                list.loadFromServer();
+
+                // We are interested in the first argument of the first call
+                var arg = zeptoStub.ajax.args[0][0];
+
+                sinon.assert.callCount(zeptoStub.ajax, 1)
+                assert.equal(arg.url, "https://example.com/list/my-test-id");
+                assert.equal(arg.type, "GET");
+                assert.equal(list.tasks()[0].title(), "one");
+            });
         });
     });
 });
