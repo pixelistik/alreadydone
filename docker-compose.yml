@@ -5,6 +5,8 @@ web:
     - "5000:5000"
   links:
   - mongodb
+  restart: always
 
 mongodb:
   build: ./containers/mongodb
+  restart: always
