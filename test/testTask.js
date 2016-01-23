@@ -91,4 +91,75 @@ describe("Task", function () {
             assert.isTrue(tasks.notifySubscribers.withArgs("New title", "child changed").calledOnce);
         });
     });
+
+    describe("Modification timestamp", function () {
+        it("should set a timestamp on creation", function () {
+            var now = Date.now();
+            var task = new Task();
+
+            assert.equal(now, task.modified);
+        });
+        it("should set a timestamp on change", function () {
+            var task = new Task();
+
+            task.modified = 99;
+
+            var now = Date.now();
+            task.done(true);
+
+            assert.equal(now, task.modified);
+        });
+    });
+
+    describe("Update by merge", function () {
+        var task1;
+        beforeEach(function () {
+            task1 = new Task({
+                id: "123",
+                title: "Task one",
+                done: false,
+                modified: 1000
+            });
+        });
+
+        it("should use the merged data, when this is newer than the current", function () {
+            var task2 = new Task({
+                id: "123",
+                title: "Task one, newer",
+                done: true,
+                modified: 2000
+            });
+
+            task1.updateMerge(task2);
+
+            assert.equal(task1.title(), "Task one, newer");
+            assert.equal(task1.done(), true);
+            assert.equal(task1.modified, 2000);
+        });
+
+        it("should keep the current data, if this is newer than the merged", function () {
+            var task2 = new Task({
+                id: "123",
+                title: "Task one, older",
+                done: true,
+                modified: 500
+            });
+
+            task1.updateMerge(task2);
+
+            assert.equal(task1.title(), "Task one");
+            assert.equal(task1.done(), false);
+            assert.equal(task1.modified, 1000);
+        });
+
+        it("should throw an exception when IDs don't match", function () {
+            var task2 = new Task({
+                id: "nonmatching"
+            });
+
+            assert.throw(function () {
+                task1.updateMerge(task2);
+            });
+        });
+    });
 });
