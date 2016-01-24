@@ -34,6 +34,23 @@ var Task = function Task(initValue, parent) {
         this.__parent.remove(this);
     };
 
+    this.loadFromServer = function () {
+        return new Promise(function (resolve, reject) {
+            this.__parent.apiClient.ajax({
+                type: "GET",
+                url: this.__parent.apiUrl + "task/" + this.id(),
+                contentType: "application/json",
+                success: function (response) {
+                    this.title(response.title);
+                    this.done(response.done);
+                    this.modified = response.modified;
+                    resolve();
+                }.bind(this),
+                error: reject
+            });
+        }.bind(this));
+    };
+
     this.saveToServer = function () {
         var json = ko.toJSON(this, this.__parent.filterHiddenPropertiesFromJson);
 

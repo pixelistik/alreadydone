@@ -201,5 +201,25 @@ describe("Task", function () {
             assert.equal(JSON.parse(arg.data)._id, "one");
             assert.deepEqual(JSON.parse(arg.data).modified, 100);
         });
+
+        it("should GET and use newer data", function () {
+            var response = {
+                id: "one",
+                _id: "one",
+                title: "one (new)",
+                done: true,
+                modified: 200
+            };
+
+            zeptoStub.ajax.yieldsTo("success", response);
+
+            return task.loadFromServer().then(function () {
+                var arg = zeptoStub.ajax.args[0][0];
+                assert.equal(arg.url, "https://example.com/task/one");
+                assert.equal(task.title(), "one (new)");
+                assert.equal(task.done(), true);
+                assert.equal(task.modified, 200);
+            });
+        });
     });
 });
