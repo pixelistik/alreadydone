@@ -22,6 +22,8 @@ var Task = function Task(initValue, parent) {
         this.id = ko.observable(generateId());
     }
 
+    this._id = this.id;
+
     if (!this.modified) {
         this.modified = Date.now();
     }
@@ -30,6 +32,21 @@ var Task = function Task(initValue, parent) {
 
     this.remove = function () {
         this.__parent.remove(this);
+    };
+
+    this.saveToServer = function () {
+        var json = ko.toJSON(this, this.__parent.filterHiddenPropertiesFromJson);
+
+        return new Promise(function (resolve, reject) {
+            this.__parent.apiClient.ajax({
+                type: "PUT",
+                url: this.__parent.apiUrl + "task/" + this.id(),
+                contentType: "application/json",
+                data: json,
+                success: resolve,
+                error: reject
+            });
+        }.bind(this));
     };
 
     this.updateMerge = function (mergeTask) {

@@ -162,4 +162,44 @@ describe("Task", function () {
             });
         });
     });
+
+    describe("Remote persistence", function () {
+        var task;
+        var zeptoStub;
+        var parentListStub;
+
+        beforeEach(function () {
+            zeptoStub = {
+                ajax: sinon.stub()
+            };
+
+            parentListStub = {
+                apiUrl: "https://example.com/",
+                apiClient: zeptoStub
+            };
+
+            task = new Task({
+                id: "one",
+                title: "One task",
+                done: false,
+                modified: 100
+            });
+
+            task.__parent = parentListStub;
+        });
+
+        it("should PUT to the correct endpoint", function () {
+            task.saveToServer();
+
+            // We are interested in the first argument of the first call
+            var arg = zeptoStub.ajax.args[0][0];
+
+            assert(zeptoStub.ajax.calledOnce);
+            assert.equal(arg.url, "https://example.com/task/one");
+            assert.equal(arg.type, "PUT");
+            assert.equal(JSON.parse(arg.data).id, "one");
+            assert.equal(JSON.parse(arg.data)._id, "one");
+            assert.deepEqual(JSON.parse(arg.data).modified, 100);
+        });
+    });
 });
