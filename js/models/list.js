@@ -55,31 +55,26 @@ var List = function List(options) {
     };
 
     this.saveToServer = function () {
-        var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
+        var taskPromises = [];
 
-        if(this.apiClient) {
-            this.apiClient.ajax({
-                type: "PUT",
-                url: this.apiUrl + "list/" + this.id(),
-                contentType: "application/json",
-                data: json,
-                success: function () { }
-            });
-        }
+        this.tasks().forEach(function (task) {
+            taskPromises.push(task.saveToServer());
+        });
+
+        return Promise.all(taskPromises);
     };
 
     this.loadFromServer = function () {
         if(this.apiClient) {
             this.apiClient.ajax({
                 type: "GET",
-                url: this.apiUrl + "list/" + this.id(),
+                url: this.apiUrl + "list/" + this.id() + "/tasks",
                 contentType: "application/json",
                 success: function (data) {
-                    // var data = JSON.parse(json);
                     listSubscription.isDisposed = true;
                     tasksSubscription.isDisposed = true;
 
-                    this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
+                    this.tasks(ko.utils.arrayMap(data, function (taskData) {
                         return new Task(taskData, this.tasks);
                     }.bind(this)));
 
@@ -101,7 +96,7 @@ var List = function List(options) {
 
     var changeHandler = function () {
         this.saveToStorage();
-        this.saveToServer();
+        // this.saveToServer();
     }.bind(this);
 
     var listSubscription = this.tasks.subscribe(changeHandler);

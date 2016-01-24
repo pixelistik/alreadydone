@@ -135,42 +135,24 @@ describe("List", function () {
         });
 
         describe("Saving", function () {
-            it("should make a PUT request to the correct endpoint", function () {
-                list.saveToServer();
+            it("should save each individual task", function () {
+                var task = new Task("some");
+                sinon.spy(task, "saveToServer");
 
-                // We are interested in the first argument of the first call
-                var arg = zeptoStub.ajax.args[0][0];
+                list.tasks.push(task);
 
-                assert(zeptoStub.ajax.calledOnce);
-                assert.equal(arg.url, "https://example.com/list/my-test-id");
-                assert.equal(arg.type, "PUT");
-                assert.equal(JSON.parse(arg.data).id, "my-test-id");
-                assert.equal(JSON.parse(arg.data)._id, "my-test-id");
-                assert.deepEqual(JSON.parse(arg.data).tasks, []);
-            });
-
-            it("should send tasks from the list", function () {
-                list.tasks.push(new Task("Task one"));
-
-                list.saveToServer();
-
-                // We are interested in the first argument of the first call
-                var arg = zeptoStub.ajax.args[0][0];
-
-                assert.equal(JSON.parse(arg.data).tasks[0].title, "Task one");
+                return list.saveToServer().then(function () {
+                    assert.equal(1, task.saveToServer.callCount);
+                });
             });
         });
 
         describe("Loading", function () {
             it("should make a GET request to the correct endpoint", function () {
-                var response = {
-                    id: "my-test-id",
-                    _id: "my-test-id",
-                    tasks: [
-                        {title: "one", done: false},
-                        {title: "two", done: true}
-                    ]
-                };
+                var response = [
+                    {title: "one", done: false},
+                    {title: "two", done: true}
+                ];
 
                 zeptoStub.ajax.yieldsTo("success", response);
 
@@ -186,7 +168,7 @@ describe("List", function () {
                 var arg = zeptoStub.ajax.args[0][0];
 
                 sinon.assert.callCount(zeptoStub.ajax, 1);
-                assert.equal(arg.url, "https://example.com/list/my-test-id");
+                assert.equal(arg.url, "https://example.com/list/my-test-id/tasks");
                 assert.equal(arg.type, "GET");
                 assert.equal(list.tasks()[0].title(), "one");
             });
