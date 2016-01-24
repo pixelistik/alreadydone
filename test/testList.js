@@ -185,7 +185,7 @@ describe("List", function () {
                 // We are interested in the first argument of the first call
                 var arg = zeptoStub.ajax.args[0][0];
 
-                sinon.assert.callCount(zeptoStub.ajax, 1)
+                sinon.assert.callCount(zeptoStub.ajax, 1);
                 assert.equal(arg.url, "https://example.com/list/my-test-id");
                 assert.equal(arg.type, "GET");
                 assert.equal(list.tasks()[0].title(), "one");
