@@ -36,7 +36,9 @@ app.get("/list/:id/tasks", function (request, response) {
 
         collection.find({listId: request.params.id}).toArray(function (err, items) {
             if(!err) {
-                response.send(items);
+                response.send(items.sort(function (item1, item2) {
+                    return item1._id.localeCompare(item2._id);
+                }));
             }
 
         });
