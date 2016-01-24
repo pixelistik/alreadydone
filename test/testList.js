@@ -137,7 +137,7 @@ describe("List", function () {
         describe("Saving", function () {
             it("should save each individual task", function () {
                 var task = new Task("some");
-                sinon.spy(task, "saveToServer");
+                sinon.stub(task, "saveToServer");
 
                 list.tasks.push(task);
 
