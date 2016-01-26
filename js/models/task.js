@@ -74,20 +74,20 @@ var Task = function Task(initValue, parent) {
         }.bind(this));
     };
 
-    this.updateMerge = function (mergeTask) {
-        if(this.id() !== mergeTask.id()) {
+    this.handleDataUpdate = function (taskData) {
+        if(this.id() !== taskData.id) {
             throw new Error(
                 "Trying to updateMerge Task " +
                 this.id() +
                 " with Task " +
-                mergeTask.id()
+                taskData.id
             );
         }
 
-        if (this.modified < mergeTask.modified) {
-            this.title(mergeTask.title());
-            this.done(mergeTask.done());
-            this.modified = mergeTask.modified;
+        if (this.modified < taskData.modified) {
+            this.title(taskData.title);
+            this.done(taskData.done);
+            this.modified = taskData.modified;
         }
     };
 

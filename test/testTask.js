@@ -111,10 +111,10 @@ describe("Task", function () {
         });
     });
 
-    describe("Update by merge", function () {
-        var task1;
+    describe("Handle data: Update by merge", function () {
+        var task;
         beforeEach(function () {
-            task1 = new Task({
+            task = new Task({
                 id: "123",
                 title: "Task one",
                 done: false,
@@ -123,42 +123,42 @@ describe("Task", function () {
         });
 
         it("should use the merged data, when this is newer than the current", function () {
-            var task2 = new Task({
+            var taskData = {
                 id: "123",
                 title: "Task one, newer",
                 done: true,
                 modified: 2000
-            });
+            };
 
-            task1.updateMerge(task2);
+            task.handleDataUpdate(taskData);
 
-            assert.equal(task1.title(), "Task one, newer");
-            assert.equal(task1.done(), true);
-            assert.equal(task1.modified, 2000);
+            assert.equal(task.title(), "Task one, newer");
+            assert.equal(task.done(), true);
+            assert.equal(task.modified, 2000);
         });
 
         it("should keep the current data, if this is newer than the merged", function () {
-            var task2 = new Task({
+            var taskData = {
                 id: "123",
                 title: "Task one, older",
                 done: true,
                 modified: 500
-            });
+            };
 
-            task1.updateMerge(task2);
+            task.handleDataUpdate(taskData);
 
-            assert.equal(task1.title(), "Task one");
-            assert.equal(task1.done(), false);
-            assert.equal(task1.modified, 1000);
+            assert.equal(task.title(), "Task one");
+            assert.equal(task.done(), false);
+            assert.equal(task.modified, 1000);
         });
 
         it("should throw an exception when IDs don't match", function () {
-            var task2 = new Task({
+            var taskData = {
                 id: "nonmatching"
-            });
+            };
 
             assert.throw(function () {
-                task1.updateMerge(task2);
+                task.handleDataUpdate(taskData);
             });
         });
     });
