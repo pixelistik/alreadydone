@@ -137,9 +137,9 @@ describe("List", function () {
         describe("Saving", function () {
             it("should save each individual task", function () {
                 var task = new Task("some");
-                sinon.stub(task, "saveToServer");
-
                 list.tasks.push(task);
+
+                sinon.stub(task, "saveToServer");
 
                 return list.saveToServer().then(function () {
                     assert.equal(1, task.saveToServer.callCount);
