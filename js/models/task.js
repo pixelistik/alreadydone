@@ -22,6 +22,14 @@ var Task = function Task(initValue, parent) {
         this.id = ko.observable(generateId());
     }
 
+    var filterHiddenPropertiesFromJson = function (key, value) {
+        if (key.startsWith("__")) {
+            return undefined;
+        } else {
+            return value;
+        }
+    };
+
     this._id = this.id;
 
     if (!this.modified) {
@@ -52,7 +60,7 @@ var Task = function Task(initValue, parent) {
     };
 
     this.saveToServer = function () {
-        var json = ko.toJSON(this, this.__parent.filterHiddenPropertiesFromJson);
+        var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
 
         return new Promise(function (resolve, reject) {
             this.__parent.apiClient.ajax({
