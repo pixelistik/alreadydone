@@ -44,7 +44,7 @@ var List = function List(options) {
             }
 
             this.tasks(ko.utils.arrayMap(data.tasks, function (taskData) {
-                return new Task(taskData, this.tasks);
+                return new Task(taskData, this);
             }.bind(this)));
 
             if (typeof doneCallback === "function") {
@@ -75,7 +75,7 @@ var List = function List(options) {
                     tasksSubscription.isDisposed = true;
 
                     this.tasks(ko.utils.arrayMap(data, function (taskData) {
-                        return new Task(taskData, this.tasks);
+                        return new Task(taskData, this);
                     }.bind(this)));
 
                     listSubscription.isDisposed = false;
@@ -88,7 +88,7 @@ var List = function List(options) {
     this.addingTitle = ko.observable("");
     this.addTask = function () {
         if (this.addingTitle().trim() !== "") {
-            this.tasks.push(new Task(this.addingTitle().trim(), this.tasks));
+            this.tasks.push(new Task(this.addingTitle().trim(), this));
             this.addingTitle("");
             this.saveToStorage();
         }

@@ -74,21 +74,23 @@ describe("Task", function () {
 
     describe("Change notification", function () {
         it("should optionally accept a parent reference", function () {
-            var tasks = [];
+            var list = {};
 
-            tasks.push(new Task("A task with a reference", tasks));
+            var task = new Task("A task with a reference", list);
         });
 
         it("should call the subscribed handler on the parent", function () {
-            var tasks = [];
+            var list = {
+                tasks: []
+            };
 
-            tasks.notifySubscribers = sinon.spy();
+            list.tasks.notifySubscribers = sinon.spy();
 
-            tasks.push(new Task("A task with a reference", tasks));
+            var task = new Task("A task with a reference", list);
 
-            tasks[0].title("New title");
+            task.title("New title");
 
-            assert.isTrue(tasks.notifySubscribers.withArgs("New title", "child changed").calledOnce);
+            assert.isTrue(list.tasks.notifySubscribers.withArgs("New title", "child changed").calledOnce);
         });
     });
 
@@ -175,7 +177,8 @@ describe("Task", function () {
 
             parentListStub = {
                 apiUrl: "https://example.com/",
-                apiClient: zeptoStub
+                apiClient: zeptoStub,
+                tasks: []
             };
 
             task = new Task({

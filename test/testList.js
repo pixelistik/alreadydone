@@ -53,7 +53,7 @@ describe("List", function () {
         it("should be possible to remove a task", function () {
             var list = new List();
 
-            var task = new Task("One", list.tasks);
+            var task = new Task("One", list);
 
             list.tasks.push(task);
             assert.equal(list.tasks()[0].title(), "One");
@@ -85,7 +85,7 @@ describe("List", function () {
         it("should save to and restore from storage", function (done) {
             var list = new List({id: "myListId"});
 
-            list.tasks.push(new Task("some item"));
+            list.tasks.push(new Task("some item", list));
 
             list.storage(mockStorage);
             list.saveToStorage();
@@ -136,7 +136,7 @@ describe("List", function () {
 
         describe("Saving", function () {
             it("should save each individual task", function () {
-                var task = new Task("some");
+                var task = new Task("some", list);
                 list.tasks.push(task);
 
                 sinon.stub(task, "saveToServer");

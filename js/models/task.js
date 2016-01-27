@@ -38,8 +38,12 @@ var Task = function Task(initValue, parent) {
 
     this.__parent = parent;
 
+    if (this.__parent) {
+        this.listId = this.__parent.id;
+    }
+
     this.remove = function () {
-        this.__parent.remove(this);
+        this.__parent.tasks.remove(this);
     };
 
     this.loadFromServer = function () {
@@ -83,11 +87,12 @@ var Task = function Task(initValue, parent) {
     };
 
     var changeHandler = function (value) {
-        if (this.__parent && typeof this.__parent.notifySubscribers === "function") {
-            this.__parent.notifySubscribers(value, "child changed");
+        if (this.__parent && typeof this.__parent.tasks.notifySubscribers === "function") {
+            this.__parent.tasks.notifySubscribers(value, "child changed");
         }
 
         this.modified = Date.now();
+        this.saveToServer();
     }.bind(this);
 
     this.title.subscribe(changeHandler);
