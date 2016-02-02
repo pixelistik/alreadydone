@@ -97,9 +97,6 @@ var Task = function Task(initValue, parent) {
 
     this.title.subscribe(changeHandler);
     this.done.subscribe(changeHandler);
-
-    // Call change handler once on creation
-    changeHandler();
 };
 
 module.exports = Task;
