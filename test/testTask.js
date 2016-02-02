@@ -5,6 +5,13 @@ var sinon = require("sinon");
 var Task = require("../js/models/task.js");
 
 describe("Task", function () {
+    var mockListParent = {
+        tasks: [],
+        apiClient: {
+            ajax: function () { }
+        }
+    };
+
     it("should exist", function () {
         assert.isDefined(Task);
     });
@@ -49,7 +56,7 @@ describe("Task", function () {
         });
 
         it("should be settable", function () {
-            var task = new Task();
+            var task = new Task("", mockListParent);
             task.title("The title is set.");
             assert.equal(task.title(), "The title is set.");
         });
@@ -62,7 +69,7 @@ describe("Task", function () {
         });
 
         it("should be settable", function () {
-            var task = new Task();
+            var task = new Task("", mockListParent);
 
             task.done(true);
             assert.isTrue(task.done());
@@ -80,17 +87,13 @@ describe("Task", function () {
         });
 
         it("should call the subscribed handler on the parent", function () {
-            var list = {
-                tasks: []
-            };
+            mockListParent.tasks.notifySubscribers = sinon.spy();
 
-            list.tasks.notifySubscribers = sinon.spy();
-
-            var task = new Task("A task with a reference", list);
+            var task = new Task("A task with a reference", mockListParent);
 
             task.title("New title");
 
-            assert.isTrue(list.tasks.notifySubscribers.withArgs("New title", "child changed").calledOnce);
+            assert.isTrue(mockListParent.tasks.notifySubscribers.withArgs("New title", "child changed").calledOnce);
         });
     });
 
@@ -102,7 +105,7 @@ describe("Task", function () {
             assert.equal(now, task.modified);
         });
         it("should set a timestamp on change", function () {
-            var task = new Task();
+            var task = new Task("", mockListParent);
 
             task.modified = 99;
 
@@ -121,7 +124,7 @@ describe("Task", function () {
                 title: "Task one",
                 done: false,
                 modified: 1000
-            });
+            }, mockListParent);
         });
 
         it("should use the merged data, when this is newer than the current", function () {

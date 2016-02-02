@@ -57,16 +57,12 @@ var Task = function Task(initValue, parent) {
     this.saveToServer = function () {
         var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
 
-        return new Promise(function (resolve, reject) {
-            this.__parent.apiClient.ajax({
-                type: "PUT",
-                url: this.__parent.apiUrl + "task/" + this.id(),
-                contentType: "application/json",
-                data: json,
-                success: resolve,
-                error: reject
-            });
-        }.bind(this));
+        return this.__parent.apiClient.ajax({
+            type: "PUT",
+            url: this.__parent.apiUrl + "task/" + this.id(),
+            contentType: "application/json",
+            data: json
+        });
     };
 
     this.handleDataUpdate = function (taskData) {
