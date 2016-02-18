@@ -212,11 +212,7 @@ describe("Task", function () {
                 modified: 200
             };
 
-            var responsePromise = new Promise(function (resolve, reject) {
-                resolve(response);
-            });
-
-            zeptoStub.ajax.returns(responsePromise);
+            zeptoStub.ajax.yieldsTo("success", response);
 
             return task.loadFromServer().then(function () {
                 var arg = zeptoStub.ajax.args[0][0];
