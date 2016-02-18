@@ -186,9 +186,7 @@ describe("Task", function () {
                 title: "One task",
                 done: false,
                 modified: 100
-            });
-
-            task.__parent = parentListStub;
+            }, parentListStub);
         });
 
         it("should PUT to the correct endpoint", function () {
