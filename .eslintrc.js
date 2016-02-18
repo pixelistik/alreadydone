@@ -28,7 +28,8 @@ module.exports = {
             { "anonymous": "always", "named": "never" }
         ],
         "space-before-blocks": [2],
-        "new-cap": [2]
+        "new-cap": [2],
+        "no-unused-vars": [1]
     },
     "env": {
         "browser": true,
