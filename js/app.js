@@ -25,7 +25,8 @@ if(location.hash === "") {
 
 list.storage(localForage);
 
-list.loadFromStorage(localForage);
-list.loadFromServer();
+list.loadFromStorage(function (err) {
+    list.saveToServer().then(list.loadFromServer);
+});
 
 ko.applyBindings(list);
