@@ -83,7 +83,7 @@ var List = function List(options) {
                 }.bind(this)
             });
         }
-    };
+    }.bind(this);
 
     this.addingTitle = ko.observable("");
     this.addTask = function () {

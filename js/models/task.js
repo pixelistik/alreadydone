@@ -47,6 +47,7 @@ var Task = function Task(initValue, parent) {
     };
 
     this.loadFromServer = function () {
+        console.log("load");
         return new Promise(function (resolve, reject) {
             this.__parent.apiClient.ajax({
                 type: "GET",
@@ -64,6 +65,7 @@ var Task = function Task(initValue, parent) {
     };
 
     this.saveToServer = function () {
+        console.log("save");
         var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
 
         return new Promise(function (resolve, reject) {
@@ -74,6 +76,26 @@ var Task = function Task(initValue, parent) {
                 data: json,
                 success: resolve,
                 error: reject
+            });
+        }.bind(this));
+    };
+
+    this.saveToServerOrReloadAndRetry = function () {
+        console.log("retryload");
+        return new Promise(function (resolve, reject) {
+            this.saveToServer().then(function () {
+                console.log("after save");
+                resolve();
+            },function (err) {
+                console.log("error saving, retry");
+                this.loadFromServer
+                    .then(this.saveToServer())
+                    .then(function () {
+                        resolve();
+                    })
+                    .catch(function () {
+                        reject();
+                    })
             });
         }.bind(this));
     };
@@ -101,7 +123,8 @@ var Task = function Task(initValue, parent) {
         }
 
         this.modified = Date.now();
-        this.saveToServer();
+        // this.saveToServer();
+        this.saveToServerOrReloadAndRetry();
     }.bind(this);
 
     this.title.subscribe(changeHandler);
