@@ -88,9 +88,12 @@ var List = function List(options) {
     this.addingTitle = ko.observable("");
     this.addTask = function () {
         if (this.addingTitle().trim() !== "") {
-            this.tasks.push(new Task(this.addingTitle().trim(), this));
+            var task = new Task(this.addingTitle().trim(), this);
+            this.tasks.push(task);
             this.addingTitle("");
+
             this.saveToStorage();
+            task.saveToServerOrReloadAndRetry();
         }
     };
 
