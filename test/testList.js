@@ -139,13 +139,13 @@ describe("List", function () {
                 var task = new Task("some", list);
                 list.tasks.push(task);
 
-                sinon.stub(task, "saveToServer")
+                sinon.stub(task, "saveToServerOrReloadAndRetry")
                     .returns(new Promise(function (resolve) {
                         resolve();
                     }));
 
                 return list.saveToServer().then(function () {
-                    assert.equal(1, task.saveToServer.callCount);
+                    assert.equal(1, task.saveToServerOrReloadAndRetry.callCount);
                 });
             });
         });
