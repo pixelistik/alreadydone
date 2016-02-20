@@ -58,7 +58,7 @@ var List = function List(options) {
         var taskPromises = [];
 
         this.tasks().forEach(function (task) {
-            taskPromises.push(task.saveToServer());
+            taskPromises.push(task.saveToServerOrReloadAndRetry());
         });
 
         return Promise.all(taskPromises);
