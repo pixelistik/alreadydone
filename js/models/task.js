@@ -88,7 +88,7 @@ var Task = function Task(initValue, parent) {
                 resolve();
             },function (err) {
                 console.log("error saving, retry");
-                this.loadFromServer
+                this.loadFromServer()
                     .then(this.saveToServer())
                     .then(function () {
                         resolve();
@@ -96,7 +96,7 @@ var Task = function Task(initValue, parent) {
                     .catch(function () {
                         reject();
                     })
-            });
+            }.bind(this));
         }.bind(this));
     };
 

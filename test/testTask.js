@@ -223,42 +223,16 @@ describe("Task", function () {
             });
         });
 
-        it("should reload if saving failed because of old data", function (done) {
-            var response = {
-                id: "one",
-                _id: "one",
-                title: "one (new)",
-                done: true,
-                modified: 200
-            };
+        it("should reload if saving failed because of old data", function () {
+            zeptoStub.ajax.yieldsTo("error", null, 409);
 
-            zeptoStub.ajax.yieldsTo("error", response);
+            sinon.spy(task, "saveToServer");
+            sinon.spy(task, "loadFromServer");
 
-            sinon.spy(task, "loadFromServer")
-
-            task.saveToServerOrReloadAndRetry().then(function () {
-                var arg = zeptoStub.ajax.args[0][0];
-
-                assert(task.loadFromServer.calledOnce);
-                assert.equal(arg.url, "https://example.com/task/one");
-                assert.equal(task.title(), "one (new)");
-                assert.equal(task.done(), true);
-                assert.equal(task.modified, 200);
-                done();
-            }).catch(function (err) {
-                console.log("catch");
-                // var arg = zeptoStub.ajax.args[0][0];
-                // console.log(task.loadFromServer.callCount);
-
-                // assert.equal(task.loadFromServer.callCount, 1);
-                assert(task.loadFromServer.calledOnce);
-
-                console.log(task.loadFromServer.callCount);
-                assert.equal(arg.url, "https://example.com/task/one");
-                assert.equal(task.title(), "one (new)");
-                assert.equal(task.done(), true);
-                assert.equal(task.modified, 200);
-                done();
+            return task.saveToServerOrReloadAndRetry().catch(function () {
+                // Save - Load - Save:
+                assert.equal(task.saveToServer.callCount, 2);
+                assert.equal(task.loadFromServer.callCount, 1);
             });
         });
     });
