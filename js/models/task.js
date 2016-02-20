@@ -47,7 +47,6 @@ var Task = function Task(initValue, parent) {
     };
 
     this.loadFromServer = function () {
-        console.log("load");
         return new Promise(function (resolve, reject) {
             this.__parent.apiClient.ajax({
                 type: "GET",
@@ -65,7 +64,6 @@ var Task = function Task(initValue, parent) {
     };
 
     this.saveToServer = function () {
-        console.log("save");
         var json = ko.toJSON(this, filterHiddenPropertiesFromJson);
 
         return new Promise(function (resolve, reject) {
@@ -81,13 +79,10 @@ var Task = function Task(initValue, parent) {
     };
 
     this.saveToServerOrReloadAndRetry = function () {
-        console.log("retryload");
         return new Promise(function (resolve, reject) {
             this.saveToServer().then(function () {
-                console.log("after save");
                 resolve();
             },function (err) {
-                console.log("error saving, retry");
                 this.loadFromServer()
                     .then(this.saveToServer())
                     .then(function () {
@@ -95,7 +90,7 @@ var Task = function Task(initValue, parent) {
                     })
                     .catch(function () {
                         reject();
-                    })
+                    });
             }.bind(this));
         }.bind(this));
     };
