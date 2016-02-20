@@ -80,18 +80,20 @@ var Task = function Task(initValue, parent) {
 
     this.saveToServerOrReloadAndRetry = function () {
         return new Promise(function (resolve, reject) {
-            this.saveToServer().then(function () {
-                resolve();
-            },function (err) {
-                this.loadFromServer()
-                    .then(this.saveToServer())
-                    .then(function () {
-                        resolve();
-                    })
-                    .catch(function () {
-                        reject();
-                    });
-            }.bind(this));
+            this.saveToServer()
+                .then(function () {
+                    resolve();
+                })
+                .catch(function (err) {
+                    this.loadFromServer()
+                        .then(this.saveToServer())
+                        .then(function () {
+                            resolve();
+                        })
+                        .catch(function () {
+                            reject();
+                        });
+                }.bind(this));
         }.bind(this));
     };
 
