@@ -29,4 +29,6 @@ list.loadFromStorage(function (err) {
     list.saveToServer().then(list.loadFromServer);
 });
 
+window.setInterval(list.loadFromServer, 1000);
+
 ko.applyBindings(list);
