@@ -139,7 +139,10 @@ describe("List", function () {
                 var task = new Task("some", list);
                 list.tasks.push(task);
 
-                sinon.stub(task, "saveToServer");
+                sinon.stub(task, "saveToServer")
+                    .returns(new Promise(function (resolve) {
+                        resolve();
+                    }));
 
                 return list.saveToServer().then(function () {
                     assert.equal(1, task.saveToServer.callCount);
