@@ -9,6 +9,7 @@ var Task = function Task(initValue, parent) {
         this.title = ko.observable(initValue);
         this.done = ko.observable(false);
         this.deleted = ko.observable(false);
+        this.orderIndex = ko.observable(Date.now() + Math.random());
         this.id = ko.observable(generateId());
         break;
     case "object":
@@ -16,12 +17,14 @@ var Task = function Task(initValue, parent) {
         this.done = ko.observable(initValue.done);
         this.deleted = ko.observable(initValue.deleted || false);
         this.id = ko.observable(initValue.id || generateId());
+        this.orderIndex = ko.observable(initValue.orderIndex || Date.now() + Math.random());
         this.modified = initValue.modified;
         break;
     default:
         this.title = ko.observable("");
         this.done = ko.observable(false);
         this.deleted = ko.observable(false);
+        this.orderIndex = ko.observable(Date.now() + Math.random());
         this.id = ko.observable(generateId());
     }
 
@@ -63,6 +66,7 @@ var Task = function Task(initValue, parent) {
                     this.title(response.title);
                     this.done(response.done);
                     this.deleted(response.deleted);
+                    this.orderIndex(response.orderIndex);
                     this.modified = response.modified;
                     resolve();
                 }.bind(this),
@@ -118,6 +122,7 @@ var Task = function Task(initValue, parent) {
         if (this.modified < taskData.modified) {
             this.title(taskData.title);
             this.done(taskData.done);
+            this.orderIndex(taskData.orderIndex);
             this.modified = taskData.modified;
         }
     };
@@ -135,6 +140,7 @@ var Task = function Task(initValue, parent) {
     this.title.subscribe(changeHandler);
     this.done.subscribe(changeHandler);
     this.deleted.subscribe(changeHandler);
+    this.orderIndex.subscribe(changeHandler);
 };
 
 module.exports = Task;

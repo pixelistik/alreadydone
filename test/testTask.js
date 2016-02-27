@@ -51,6 +51,13 @@ describe("Task", function () {
 
             assert.equal(result.deleted(), true);
         });
+
+        it("should get an order index", function () {
+            var task1 = new Task();
+            var task2 = new Task();
+
+            assert.notEqual(task1.orderIndex(), task2.orderIndex());
+        });
     });
 
     describe("Title", function () {

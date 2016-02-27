@@ -13,7 +13,7 @@
         <div class="container page">
             <h2>Tasks</h2>
 
-            <ul class="list-unstyled" data-bind="foreach: nonDeletedTasks">
+            <ul class="list-unstyled" data-bind="foreach: sortedTasks">
                 <li
                     class="row task"
                     data-bind="css: { 'task--done': done, 'task--undone': !done() }"

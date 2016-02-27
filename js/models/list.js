@@ -3,6 +3,7 @@
 var ko = require("knockout");
 var Task = require("./task.js");
 var generateId = require("uuid").v4;
+var _ = require("lodash");
 
 var List = function List(options) {
     options = options || {};
@@ -17,6 +18,14 @@ var List = function List(options) {
         return this.tasks().filter(function (task) {
             return !task.deleted();
         });
+    }.bind(this));
+
+    this.sortedTasks = ko.computed(function () {
+        return _.sortBy(
+            this.nonDeletedTasks(),
+            function (task) {
+                return task.orderIndex();
+            });
     }.bind(this));
 
     var filterHiddenPropertiesFromJson = function (key, value) {
