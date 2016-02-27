@@ -72,6 +72,14 @@ describe("Task", function () {
         });
     });
 
+    describe("Soft delete", function () {
+        it("should not be deleted initially", function () {
+            var task = new Task();
+
+            assert.isFalse(task.deleted());
+        });
+    });
+
     describe("Change notification", function () {
         it("should optionally accept a parent reference", function () {
             var list = {};

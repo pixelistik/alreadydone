@@ -13,6 +13,12 @@ var List = function List(options) {
     this.apiUrl = options.apiUrl || null;
     this.apiClient = options.apiClient || null;
 
+    this.nonDeletedTasks = ko.computed(function () {
+        return this.tasks().filter(function (task) {
+            return !task.deleted();
+        });
+    }.bind(this));
+
     var filterHiddenPropertiesFromJson = function (key, value) {
         if (key.startsWith("__")) {
             return undefined;

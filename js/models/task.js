@@ -8,17 +8,20 @@ var Task = function Task(initValue, parent) {
     case "string":
         this.title = ko.observable(initValue);
         this.done = ko.observable(false);
+        this.deleted = ko.observable(false);
         this.id = ko.observable(generateId());
         break;
     case "object":
         this.title = ko.observable(initValue.title);
         this.done = ko.observable(initValue.done);
+        this.deleted = ko.observable(false);
         this.id = ko.observable(initValue.id || generateId());
         this.modified = initValue.modified;
         break;
     default:
         this.title = ko.observable("");
         this.done = ko.observable(false);
+        this.deleted = ko.observable(false);
         this.id = ko.observable(generateId());
     }
 
@@ -44,6 +47,10 @@ var Task = function Task(initValue, parent) {
 
     this.remove = function () {
         this.__parent.tasks.remove(this);
+    };
+
+    this.softDelete = function () {
+        this.deleted(true);
     };
 
     this.loadFromServer = function () {

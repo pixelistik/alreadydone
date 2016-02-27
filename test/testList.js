@@ -62,6 +62,18 @@ describe("List", function () {
 
             assert.lengthOf(list.tasks(), 0);
         });
+
+        it("should provide all undeleted tasks", function () {
+            var list = new List();
+
+            var task = new Task("One", list);
+
+            list.tasks.push(task);
+            assert.lengthOf(list.nonDeletedTasks(), 1);
+
+            task.deleted(true);
+            assert.lengthOf(list.nonDeletedTasks(), 0);
+        });
     });
 
     describe("Local persistence", function () {

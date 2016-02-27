@@ -13,7 +13,7 @@
         <div class="container page">
             <h2>Tasks</h2>
 
-            <ul class="list-unstyled" data-bind="foreach: tasks">
+            <ul class="list-unstyled" data-bind="foreach: nonDeletedTasks">
                 <li
                     class="row task"
                     data-bind="css: { 'task--done': done, 'task--undone': !done() }"
@@ -33,7 +33,7 @@
                         <button
                             class="btn btn-sm "
                             title="Delete task"
-                            data-bind="click: remove"
+                            data-bind="click: softDelete"
                         >✖</button>
                     </span>
                 </li>
