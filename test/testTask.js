@@ -40,6 +40,17 @@ describe("Task", function () {
 
             assert.equal(task.id(), "myProvidedId");
         });
+
+        it("should use a provided soft delete state", function () {
+            var taskData = {
+                title: "A deleted task",
+                deleted: true
+            };
+
+            var result = new Task(taskData);
+
+            assert.equal(result.deleted(), true);
+        });
     });
 
     describe("Title", function () {
@@ -217,6 +228,7 @@ describe("Task", function () {
                 _id: "one",
                 title: "one (new)",
                 done: true,
+                deleted: true,
                 modified: 200
             };
 
@@ -227,6 +239,7 @@ describe("Task", function () {
                 assert.equal(arg.url, "https://example.com/task/one");
                 assert.equal(task.title(), "one (new)");
                 assert.equal(task.done(), true);
+                assert.equal(task.deleted(), true);
                 assert.equal(task.modified, 200);
             });
         });

@@ -14,7 +14,7 @@ var Task = function Task(initValue, parent) {
     case "object":
         this.title = ko.observable(initValue.title);
         this.done = ko.observable(initValue.done);
-        this.deleted = ko.observable(false);
+        this.deleted = ko.observable(initValue.deleted || false);
         this.id = ko.observable(initValue.id || generateId());
         this.modified = initValue.modified;
         break;
@@ -62,6 +62,7 @@ var Task = function Task(initValue, parent) {
                 success: function (response) {
                     this.title(response.title);
                     this.done(response.done);
+                    this.deleted(response.deleted);
                     this.modified = response.modified;
                     resolve();
                 }.bind(this),
@@ -133,6 +134,7 @@ var Task = function Task(initValue, parent) {
 
     this.title.subscribe(changeHandler);
     this.done.subscribe(changeHandler);
+    this.deleted.subscribe(changeHandler);
 };
 
 module.exports = Task;
