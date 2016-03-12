@@ -2,6 +2,7 @@
 
 var ko = require("knockout");
 var zepto = require("npm-zepto");
+var Sortable = require("sortablejs");
 
 ko.bindingHandlers.enterkey = require("./bindings/enterkey.js");
 
@@ -32,3 +33,29 @@ list.loadFromStorage(function (err) {
 window.setInterval(list.loadFromServer, 1000);
 
 ko.applyBindings(list);
+
+var sortable = Sortable.create(
+    document.querySelector(".js-sortable"),
+    {
+        onStart: function (evt) {
+            list.loadingFromServerSuspended = true;
+            console.log("Suspended: " + list.loadingFromServerSuspended);
+        },
+        onEnd: function (evt) {
+            var draggedTask = list.sortedTasks()[evt.oldIndex];
+
+            var newpreviousTask = list.sortedTasks()[evt.newIndex];
+            var newNextTask = list.sortedTasks()[evt.newIndex];
+
+            var newOrderIndex = newNextTask.orderIndex() - 0.1;
+
+            console.log(draggedTask.orderIndex());
+            draggedTask.orderIndex(newOrderIndex);
+            console.log(draggedTask.orderIndex());
+
+            list.loadingFromServerSuspended = false;
+            console.log("Suspended: " + list.loadingFromServerSuspended);
+            console.log(list.tasks());
+        }
+    }
+);

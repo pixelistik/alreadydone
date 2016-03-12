@@ -13,6 +13,7 @@ var List = function List(options) {
     this.storage = ko.observable();
     this.apiUrl = options.apiUrl || null;
     this.apiClient = options.apiClient || null;
+    this.loadingFromServerSuspended = false;
 
     this.nonDeletedTasks = ko.computed(function () {
         return this.tasks().filter(function (task) {
@@ -80,12 +81,24 @@ var List = function List(options) {
     };
 
     this.loadFromServer = function () {
+        if(this.loadingFromServerSuspended) {
+            return;
+        }
+
         if(this.apiClient) {
             this.apiClient.ajax({
                 type: "GET",
                 url: this.apiUrl + "list/" + this.id() + "/tasks",
                 contentType: "application/json",
                 success: function (data) {
+                    /*
+                     * Check again, loading may have been suspended since the
+                     * request has been made.
+                     */
+                    if(this.loadingFromServerSuspended) {
+                        return;
+                    }
+
                     listSubscription.isDisposed = true;
                     tasksSubscription.isDisposed = true;
 
