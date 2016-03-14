@@ -7,8 +7,7 @@
     "start": "node index.js",
     "test": "mocha",
     "test:watch": "mocha --watch",
-    "debugger": "node-inspector --save-live-edit",
-    "test:debug": "mocha --debug --debug-brk",
+    "test:debug": "echo 'Use `debugger` in code to set a breakpoint.' && node_modules/.bin/devtool node_modules/mocha/bin/_mocha",
     "test-containerised": "docker-compose -f docker-compose-dev.yml run web npm run test",
     "test-containerised:watch": "docker-compose -f docker-compose-dev.yml run web npm run test:watch",
     "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha",
@@ -48,6 +47,7 @@
     "chai": "~3.4.1",
     "sinon": "~1.17.2",
     "supertest": "~1.1.0",
-    "istanbul": "~0.4.2"
+    "istanbul": "~0.4.2",
+    "devtool": "~1.8.3"
   }
 }
