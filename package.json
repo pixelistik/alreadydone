@@ -11,6 +11,7 @@
     "test:debug": "mocha --debug --debug-brk",
     "test-containerised": "docker-compose -f docker-compose-dev.yml run web npm run test",
     "test-containerised:watch": "docker-compose -f docker-compose-dev.yml run web npm run test:watch",
+    "test:coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha",
     "build": "browserify js/app.js -o js/bundle.js",
     "watch": "watchify --debug js/app.js -o js/bundle.js"
   },
@@ -46,6 +47,7 @@
     "mocha": "~2.3.4",
     "chai": "~3.4.1",
     "sinon": "~1.17.2",
-    "supertest": "~1.1.0"
+    "supertest": "~1.1.0",
+    "istanbul": "~0.4.2"
   }
 }
