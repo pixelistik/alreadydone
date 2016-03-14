@@ -42,6 +42,17 @@ var Task = function Task(initParam, parent) {
     this.orderIndex = ko.observable(initValue.orderIndex);
     this.modified = initValue.modified;
 
+    this._id = this.id;
+
+    this.__parent = parent;
+    if (this.__parent) {
+        this.listId = this.__parent.id;
+    }
+
+    if (!this.modified) {
+        this.modified = Date.now();
+    }
+
     var filterHiddenPropertiesFromJson = function (key, value) {
         if (key.startsWith("__")) {
             return undefined;
@@ -49,18 +60,6 @@ var Task = function Task(initParam, parent) {
             return value;
         }
     };
-
-    this._id = this.id;
-
-    if (!this.modified) {
-        this.modified = Date.now();
-    }
-
-    this.__parent = parent;
-
-    if (this.__parent) {
-        this.listId = this.__parent.id;
-    }
 
     this.remove = function () {
         this.__parent.tasks.remove(this);
