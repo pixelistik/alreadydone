@@ -52,6 +52,16 @@ describe("Task", function () {
             assert.equal(result.deleted(), true);
         });
 
+        it("should default to non-soft-deleted state when created with object param", function () {
+            var taskData = {
+                title: "A deleted task",
+            };
+
+            var result = new Task(taskData);
+
+            assert.equal(result.deleted(), false);
+        });
+
         it("should get an order index", function () {
             var task1 = new Task();
             var task2 = new Task();

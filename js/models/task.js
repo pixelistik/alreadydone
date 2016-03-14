@@ -1,32 +1,46 @@
 "use strict";
 
 var ko = require("knockout");
+var _ = require("lodash");
 var generateId = require("uuid").v4;
 
-var Task = function Task(initValue, parent) {
-    switch (typeof initValue) {
+var Task = function Task(initParam, parent) {
+
+    // Default values for a new Task
+    var defaults = {
+        title: "",
+        done: false,
+        deleted: false,
+        orderIndex: Date.now() + Math.random(),
+        id: generateId()
+    };
+
+
+    // Set any values that were passed to the constructor
+    var initValue = {};
+
+    switch (typeof initParam) {
     case "string":
-        this.title = ko.observable(initValue);
-        this.done = ko.observable(false);
-        this.deleted = ko.observable(false);
-        this.orderIndex = ko.observable(Date.now() + Math.random());
-        this.id = ko.observable(generateId());
+        initValue.title = initParam;
+
+        _.defaults(initValue, defaults);
         break;
+
     case "object":
-        this.title = ko.observable(initValue.title);
-        this.done = ko.observable(initValue.done);
-        this.deleted = ko.observable(initValue.deleted || false);
-        this.id = ko.observable(initValue.id || generateId());
-        this.orderIndex = ko.observable(initValue.orderIndex || Date.now() + Math.random());
-        this.modified = initValue.modified;
+        _.defaults(initValue, initParam, defaults);
         break;
+
     default:
-        this.title = ko.observable("");
-        this.done = ko.observable(false);
-        this.deleted = ko.observable(false);
-        this.orderIndex = ko.observable(Date.now() + Math.random());
-        this.id = ko.observable(generateId());
+        _.defaults(initValue, defaults);
     }
+
+    // Set values to instance, observable where needed
+    this.title = ko.observable(initValue.title);
+    this.done = ko.observable(initValue.done);
+    this.deleted = ko.observable(initValue.deleted);
+    this.id = ko.observable(initValue.id);
+    this.orderIndex = ko.observable(initValue.orderIndex);
+    this.modified = initValue.modified;
 
     var filterHiddenPropertiesFromJson = function (key, value) {
         if (key.startsWith("__")) {
